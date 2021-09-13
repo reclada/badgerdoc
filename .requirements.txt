@@ -1,0 +1,14 @@
+gdown==3.12.2
+torch==1.7.0
+torchvision==0.8.1
+pillow==7.2.0
+click==7.1.2
+scipy==1.5.4
+pdf2image==1.14.0
+python-poppler==0.2.2
+tesserocr==2.5.1
+paddleocr==2.0.2
+paddlepaddle==2.0rc1 --index-url https://mirror.baidu.com/pypi/simple
+nltk==3.5
+openpyxl==3.*
+scikit-learn==0.24.1
