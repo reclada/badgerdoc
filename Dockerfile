@@ -1,5 +1,15 @@
 FROM python:3.8.10-buster
 
+RUN echo '\
+Acquire::Retries "400";\
+Acquire::https::Timeout "2480";\
+Acquire::http::Timeout "2480";\
+APT::Get::Assume-Yes "true";\
+APT::Install-Recommends "true";\
+APT::Install-Suggests "false";\
+Debug::Acquire::https "true";\
+' > /etc/apt/apt.conf.d/99custom
+
 RUN apt-get install apt-transport-https && \
     echo "deb https://notesalexp.org/tesseract-ocr/buster/ buster main" >> /etc/apt/sources.list && \
     wget -O - https://notesalexp.org/debian/alexp_key.asc | apt-key add -
@@ -27,15 +37,17 @@ RUN poetry config virtualenvs.create false && \
     && poetry install --no-interaction \
     && rm -rf poetry.lock pyproject.toml poetry.lock mmcv/
 
-RUN pip install 'git+https://github.com/open-mmlab/mmdetection.git@v2.7.0'
+RUN pip install 'git+https://github.com/open-mmlab/mmdetection.git'
 
 RUN python -m nltk.downloader stopwords && \
     python -m nltk.downloader words && \
     python -m nltk.downloader punkt && \
     python -m nltk.downloader wordnet
 
+RUN pip install gdown==4.6.0
+
 RUN mkdir /models && \
-    gdown "https://drive.google.com/uc?id=1Nn0g0gIupW6xIpBZnwHRcyEDq9j6AtX2" -O /models/3_cls_w18_e30.pth
+    gdown "https://drive.google.com/uc?id=1N2jh7VATN3w68On_GYUL-su37-gjX_mE" -O /models/3_cls_w18_e30.pth
 
 ENV CASCADE_MODEL_PATH="/models/3_cls_w18_e30.pth"
 
